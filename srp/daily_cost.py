@@ -3,76 +3,54 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# import daily cost csv
-df = pd.read_csv('dailyCost7_20_2025_to_8_19_2025.csv')
-# drop last combined row 
-df = df.drop(df.index[-1])
-# import hourly cost csv
-df1 = pd.read_csv('hourlyCost7_20_2025_to_8_19_2025.csv')
-# convert usage date to pandas datetime
-df['Usage date'] = pd.to_datetime(df['Usage date'])
-# remove $ and covert to float
-df['Total cost'] = df['Total cost'].replace({'\\$': '', ',': ''}, regex=True).astype(float)
-# create a new column with the day of week
-df['Day of week'] = df['Usage date'].dt.day_name()
-print(df.dtypes)
-df.head()
 
-# create a list that assignes colors for the weekdays/weekends for Day of Week
-colors = ['red' if day in ['Saturday', 'Sunday'] else 'blue' for day in df['Day of week']]
-# initate figure and axis for plotting
-fig, ax = plt.subplots(figsize = (10,5))
-ax.bar(df['Usage date'], df['Total cost'], edgecolor = colors, color = 'steelblue', label = 'Total Cost')
-# create a secondary axis on the same figure for the temperature
-ax1 = ax.twinx()
-ax1.plot(df['Usage date'], df['High temperature (F)'], 'k', ls = 'dotted', label = 'High temperature') 
-ax.set_xlabel('Usage date')
-ax.set_ylabel('Cost $')
-#ax.set_ylim(0,8)
-ax1.set_ylabel('Temperature')
-ax1.set_ylim(20,120)
-ax.legend()
-ax1.legend()
+def create_dataframe(filepath: str) -> pd.DataFrame:
+    """
+    Load and clean cost data sets
 
-# get the mean, max, min, and standard deviation of the data set
-stat = df['Total cost'].agg(['mean', 'max', 'min', 'std'])
-print(stat)
-# create a data frame that contains the days that have above average energy use
-above_average = df[df['Total cost'].ge(stat['mean'])]
-# Group and count the days of week that are above average energy use
-day_groups = above_average.groupby('Day of week')['Day of week'].value_counts()
-# create new index to sort the days of week chronologically
-days_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-day_groups.index = pd.CategoricalIndex(day_groups.index, categories=days_order, ordered=True)
-day_groups = day_groups.sort_index()
-# bar graph of the days of week that are above average 
-day_groups.plot(kind='bar', title='Number of times above average usage')
+    ----------
+    Steps:
+    1. Read the csv into a dataframe
+    2. If the last row is a total, drop that row
+    3. Convert 'Usage date' to datetime.
+    4. Clean the 'Total cost' column and convert to float
+    5. Add a new column with weekday names
+
+    Parameters
+    ----------
+    filepath: str
+            Path to the CSV file
+
+    Returns
+    ----------
+    pd.DataFrame
+            The cleaned dataframe
+    """
+    # import csv
+    df = pd.read_csv(filepath)
+    # drop any columns where the usage date is Nan
+    df = df.dropna(subset=['Usage date'])
+    # convert usage date to datetime
+    df['Usage date'] = pd.to_datetime(df['Usage date'])
+    # convert the total cost to float, remove $
+    df['Total cost'] = (
+        df['Total cost']
+        .replace({'\\$': '', ',': ''}, regex=True)
+        .astype(float)
+    )
+    # create a new column with the day of the week
+    df['Day of week'] = df['Usage date'].dt.day_name()
+    # create a datetime column to sort hourly costs
+    df['Datetime'] = pd.to_datetime(
+        df['Usage date'] + " " + df['Interval'], format="%m/%d/%Y %I:%M %p")
+    return df
 
 
-df1['Total cost'] = df1['Total cost'].replace({'\\$': '', ',': ''}, regex=True).astype(float)
-df1["Datetime"] = pd.to_datetime(df1["Usage date"] + " " + df1["Interval"], format="%m/%d/%Y %I:%M %p")
-df1['Day of week'] = df1['Datetime'].dt.day_name()
-df1['Usage date'] = pd.to_datetime(df1['Usage date'])
-
-fig, ax = plt.subplots(figsize = (15,10))
-ax.plot(df1['Datetime'], df1['Total cost'])
-df1.head()
-
-max = df.loc[df['Total cost'] == df['Total cost'].max()]
-max_date = max['Usage date'].iloc[0]
-print(max_date)
-
-max_day = df1.loc[df1['Usage date'] == max_date]
-max_day.plot.bar(x= 'Datetime', y='Total cost')
-
-above_average1 = df[df['Total cost'].ge(stat['mean'] + 1)].reset_index()
-above_average1
-
-day0 = df1.loc[df1['Usage date'] == above_average1['Usage date'][0]]
-day0.plot.bar(x= 'Datetime', y='Total cost')
-
-plt.bar(df1.loc[df1['Usage date'] == above_average1['Usage date'][0]]['Datetime'],
-        df1.loc[df1['Usage date'] == above_average1['Usage date'][0]]['Total cost'])
-plt.gcf().autofmt_xdate()
-
-
+"""
+Testing below, file is unfinished
+"""
+if __name__ == "__main__":
+    df = create_dataframe(
+        'cost_data/dailyCost7_14_2025_to_9_26_2025.csv'
+    )
+    print(df.head())
