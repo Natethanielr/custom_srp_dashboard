@@ -5,6 +5,23 @@ from src.analysis import high_use_days
 
 
 def useage_and_temp(df: pd.DataFrame) -> plt.Figure:
+    """ Graphs daily usage and temp
+
+    This function takes the daily usage dataframe 
+    and graphs it over time. Additional axis to 
+    show the daily high temperature. Includes add
+    itional functionality to assign colors to 
+    differentiate weekdays and weekend. 
+
+
+    Args: 
+        df: A data frame (usage specific to the daily 
+            usage data)
+
+
+    Returns: 
+        fig: Returns a matplotlib figure 
+    """
     # create a list that assignes colors for the weekdays/weekends for Day of Week
     colors = ['red' if day in ['Saturday', 'Sunday']
               else 'blue' for day in df['Day of week']]
@@ -27,6 +44,22 @@ def useage_and_temp(df: pd.DataFrame) -> plt.Figure:
 
 
 def high_use_groups(df: pd.DataFrame) -> plt.Figure:
+    """ Graphs count of high use days
+
+    This function imports analysis from the analysis file
+    that counts the number of times a day of the week has
+    above average energy use. This is intended to show what
+    days are generally high usage days. The function will
+    take the daily use dataframe as the argumet, pass that
+    through a function from analysis to obtain a series 
+    with the counts of days, the graph that series. 
+
+    Arg: 
+        df: The daily usage data frame. 
+
+    Returns: 
+        fig: Bar graph of the counts
+    """
     high_use = high_use_days(df)
     fig, ax = plt.subplots()
     high_use.plot(kind='bar', title='Number of times above average usage')
