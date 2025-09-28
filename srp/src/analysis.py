@@ -1,7 +1,10 @@
 import pandas as pd
-from src.data_import import daily_data, hourly_data
+from src.data_import import load_data
 from typing import cast
 
+
+"""
+    moved this logic into the data_import file, testing the output to make sure the new imported function works as expected. 
 
 def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     daily_df = daily_data(
@@ -9,6 +12,7 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     hourly_df = hourly_data(
         '~/Documents/python_projects/finance/srp/data/hourlyCost7_14_2025_to_9_26_2025.csv')
     return daily_df, hourly_df
+"""
 
 
 def get_stats(df: pd.DataFrame) -> pd.Series:
@@ -45,6 +49,17 @@ def grouped_above_days(above_average: pd.DataFrame):
     day_groups.index = pd.CategoricalIndex(
         day_groups.index, categories=days_order, ordered=True)
     day_groups = day_groups.sort_index()
+    return day_groups
+
+
+def high_use_days(daily: pd.DataFrame) -> pd.Series:
+    """
+        Wrapper that requires only the input of a daily
+        data frame to generate a series of grouped days
+    """
+    stats = get_stats(daily)
+    above_average = above_average_days(daily, stats)
+    day_groups = grouped_above_days(above_average)
     return day_groups
 
 

@@ -59,3 +59,15 @@ def hourly_data(filepath: str) -> pd.DataFrame:
     # create a new column with the day of the week
     df['Day of week'] = df['Usage date'].dt.day_name()
     return df
+
+
+def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+        Specifies the file path for the csv file and loads them into the dataframes.
+        Call this function to load the data into a file.
+    """
+    daily_df = daily_data(
+        '~/Documents/python_projects/finance/srp/data/dailyCost7_14_2025_to_9_26_2025.csv')
+    hourly_df = hourly_data(
+        '~/Documents/python_projects/finance/srp/data/hourlyCost7_14_2025_to_9_26_2025.csv')
+    return daily_df, hourly_df
