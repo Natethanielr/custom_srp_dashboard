@@ -1,9 +1,9 @@
-import numpy as np
 import pandas as pd
 from src.data_import import daily_data, hourly_data
+from typing import cast
 
 
-def load_data() -> pd.DataFrame:
+def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     daily_df = daily_data(
         '~/Documents/python_projects/finance/srp/data/dailyCost7_14_2025_to_9_26_2025.csv')
     hourly_df = hourly_data(
@@ -16,7 +16,7 @@ def get_stats(df: pd.DataFrame) -> pd.Series:
     creates a pd series that contains the statistics of a datafram
     """
     stats = df['Total cost'].agg(['mean', 'max', 'min', 'std'])
-    return stats
+    return cast(pd.Series, stats)
 
 
 def above_average_days(
@@ -28,7 +28,7 @@ def above_average_days(
     """
 
     above_average = df[df['Total cost'].ge(stats['mean'])]
-    return above_average
+    return cast(pd.DataFrame, above_average)
 
 
 def grouped_above_days(above_average: pd.DataFrame):
@@ -48,13 +48,24 @@ def grouped_above_days(above_average: pd.DataFrame):
     return day_groups
 
 
+def maximum_usage_date(
+        daily_df: pd.DataFrame,
+        hourly_df: pd.DataFrame
+) -> pd.DataFrame:
+    max_date = daily_df.loc[daily_df['Total cost'].idxmax(), 'Usage date']
+    max_day = hourly_df.loc[hourly_df['Usage date'] == max_date, :]
+    return max_day
+
+
 def main():
     daily, hourly = load_data()
     stats = get_stats(daily)
     above_avg = above_average_days(daily, stats)
     grouped = grouped_above_days(above_avg)
+    max_date = maximum_usage_date(daily, hourly)
     print(stats)
     print(grouped)
+    print(max_date)
 
 
 if __name__ == "__main__":
