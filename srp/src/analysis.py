@@ -16,8 +16,15 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def get_stats(df: pd.DataFrame) -> pd.Series:
-    """
-    creates a pd series that contains the statistics of a datafram
+    """Creates a pd series that contains the statistics of a datafram
+
+    This function takes the daily cost dataframe, calculates the agg mean, max, min, and std of the total cost column. Returns a pd series with these statistics. 
+
+    Args: 
+        df (pd.DataFrame): dataframe containing cost data
+
+    Returns: 
+        stats (pd.Series): series with statistics
     """
     stats = df['Total cost'].agg(['mean', 'max', 'min', 'std'])
     return cast(pd.Series, stats)
@@ -26,9 +33,17 @@ def get_stats(df: pd.DataFrame) -> pd.Series:
 def above_average_days(
         df: pd.DataFrame,
         stats: pd.Series) -> pd.DataFrame:
-    """
+    """ Create dataframe containing all days where energy use is above avg
+
     Uses the statistics of a dataframe to generate a new dataframe that
-        contains all days that are obove the average energy use
+    contains all days that are obove the average energy use. This will 
+    return all days where the the total cost is above the mean. 
+
+    Args: 
+        df (pd.DataFrame): daily cost dataframe
+
+    Returns: 
+        above_average (pd.DataFrame): above average dataframe
     """
 
     above_average = df[df['Total cost'].ge(stats['mean'])]
@@ -36,7 +51,7 @@ def above_average_days(
 
 
 def grouped_above_days(above_average: pd.DataFrame):
-    """
+    """ 
     Creates a new dataframe that is catogorized and groupled by days of
         the week based on the days above average
     """
