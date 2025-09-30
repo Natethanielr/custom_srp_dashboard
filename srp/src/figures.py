@@ -4,6 +4,10 @@ from src.data_import import load_data
 from src.analysis import high_use_days
 
 
+# TODO
+# - Add ability to graph hourly of high usage dates 
+# - Add more robust docstring documentation 
+# - Fix spelling mistakes
 def useage_and_temp(df: pd.DataFrame) -> plt.Figure:
     """ Graphs daily usage and temp
 

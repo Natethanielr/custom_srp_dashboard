@@ -2,6 +2,12 @@ import pandas as pd
 from src.data_import import load_data
 from typing import cast
 
+# TODO
+# - Improve docstring documentation 
+# - Fix spelling mistakes 
+# - Evaluate variable names
+# - Add capability to select specific date ranges from hourly data set
+# - Add capability to identify the hour ranges with consistently high usage
 
 """
     moved this logic into the data_import file, testing the output to make sure the new imported function works as expected. 
