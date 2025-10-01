@@ -1,33 +1,39 @@
-# Electricity Usage 
+# Custom SRP Dashboard  
+  
+## Purpose:   
+  
+With energy costs on the rise around the country, it is more important than ever to closly monitor electricity use and cost. The information from the SRP.net shows the daily and hourly cost and energy use /(In USD and kWh respectivly/). That is the only information that can be gained at first glance from the webpage. I want to expand information and analysis of the usage data and create a custom dashboard to display that analysis. Primarily, I am interested in identifying days which have consitently above average energy usage, and, specifically, during what times I am seeing high usage. This information will help me identify where I can reduce energy use, and also determine if differnt price structures from SRP would be benificial. Currently, the project is only set up for personal use, however, I plan to expand the functionality to allow it to be used generally.  
+  
+  
+## Built With: 
 
-## Purpose 
-
-The information I get from the srp dashboard is good, but I wanted more indepth information about electricity use. The goal of this project is to get a more substantial view of usage trends, identify days and times of above average usage, and create a plan to reduce electricty costs. 
-
+- Python 
+- Jupyter Notebook 
+- Front end somehow 
+  
+  
 ## Structure
 srp/  
 |  
 |-- data/  
 |  
 |-- notebooks/  
-|     --srp.ipynb  
+    |     --srp.ipynb  
 |-- src  
-|     --import_data.py  
-|     --analysis.py  
+    |     --import_data.py  
+    |     --analysis.py  
+    |     --figures.py
 |--tests  
-|     --testing.py  
-The jupyter notebook contains the base for this project. In that notebook, I explore trends and write the baseline code for the rest of the project. The accompanying python code is a cleaned up, streamlined code base to later be integrated into a dashboard. 
+    |     --testing.py  
+  
+  
+## Notes on files: 
+This is a personal repo built primaraly for practice and learning. As a result, the jupyter noreboo in the file exist as a history of the begining. I began working on this as a data analystics project just to look at what my own data. I have left the notebook in the repo because much of the analysis and plotting code came from that notebook. If I decide to make this a public tool, there will be a new repo created that has a cleaner structure. There is not yet a well defined data pipeline and relys on file paths on unix machines. 
+  
+You can only download one month at a time of daily data from SRP. Because of this, in the data folder there is a script to combine files to make one csv will all the hourly data. 
 
-# Data
-Contains the csv files downloaded from srp.net. The hourly totals cannot be downloaded as one data set, so they are combined then saved as a new csv. 
+## What is project_req.md: 
 
-# Notebooks
-Includes the main srp.ipynb that has the core of the project, the exploritory code, and main ideas for the code. 
+This is under development, project req is a way for me to track project requirements and todos. I come from a systems engineering background, and that is evident in the way the requirements are written and structured. 
 
-# src
-Source for the python pipeline. 
-
-## import_data.py
-Defines the functions for importing, cleaning, and moduifying the srp csv into dataframes to beo later be integrated into a dashboard. 
-There must be a better way to do this, both functions are almost identical. The only difference is that the hourly cost need an additional interval column, and the order of operations of coverting usage date to date time matters in this context. Did not matter when it was in the notebook, but now that I have the damn function the order fucks shit up. 
 
