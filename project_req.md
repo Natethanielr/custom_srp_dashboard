@@ -29,4 +29,13 @@ With energy costs on the rise around the country, it is more important than ever
 1.31.1: Plot the days as a bar chart and add the temperature as a line graph
 1.3.2: Bar graph of days of the week in chronological order in x axis, and count of times above     average on the y axis  
 1.33: Plot hourly data of top 4 high use days 
+  
+  
+## TODO: 
 
+- FIX MY F****** VARIABLE NAMES
+- Graph high use days 
+- Identify days + 1/2 std
+- Possibly generate the "average" day (get mean of use during hours and graph the means)
+- Possibly generate the "average" high use day
+- Calculate what hours in the day have highest use
